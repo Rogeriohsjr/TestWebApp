@@ -71,7 +71,7 @@ steps:
   displayName: 'Publish Coverage Report'
   inputs:
     codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\DynamicCodeCoverage.coveragexml'
+    summaryFileLocation: '$(System.TempDirectory)\TestResults\DynamicCodeCoverage.coveragexml'
 
 
 - task: PowerShell@2
