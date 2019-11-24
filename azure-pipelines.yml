@@ -48,13 +48,17 @@ steps:
       cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools"
       ls
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd "$(Agent.TempDirectory)\TestResults"
+      ls
+
 - task: CoverageConverter@0
   inputs:
     codeCoverageExeFileLocation: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe'
-    listTestFiles: |
-      **\*test*.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
+    listTestFiles: '**\*TestAspWebApp.Tests.dll'
 
 - task: PowerShell@2
   inputs:
