@@ -47,15 +47,36 @@ steps:
     coverageFileLocation: '**/*.coverage'
     codeCoverageExeFileLocation: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe'
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd "$(Agent.TempDirectory)\TestResults"
+      ls
+
 - task: reportgenerator@4
   displayName: 'Generate Coverage Report'
   inputs:
     reports: '$(Agent.TempDirectory)\TestResults\DynamicCodeCoverage.coveragexml'
     targetdir: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports'
-    assemblyfilters: '-xunit*'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd "$(System.DefaultWorkingDirectory)\TestResults"
+      ls
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish Coverage Report'
   inputs:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\DynamicCodeCoverage.coveragexml'
+
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      cd "$(System.DefaultWorkingDirectory)\TestResults\Coverage\DynamicCodeCoverage.coveragexml"
+      ls
