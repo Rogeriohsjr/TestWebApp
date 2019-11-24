@@ -59,6 +59,7 @@ steps:
   inputs:
     reports: '$(Agent.TempDirectory)\TestResults\DynamicCodeCoverage.coveragexml'
     targetdir: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports'
+    reporttypes: 'HtmlInline_AzurePipelines;Cobertura;Badges'
 
 - task: PowerShell@2
   inputs:
@@ -71,12 +72,13 @@ steps:
   displayName: 'Publish Coverage Report'
   inputs:
     codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(System.TempDirectory)\TestResults\DynamicCodeCoverage.coveragexml'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports\Cobertura.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports'
 
 
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
-      cd "$(System.DefaultWorkingDirectory)\TestResults\Coverage"
+      cd "$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports"
       ls
