@@ -36,7 +36,7 @@ steps:
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
-    codeCoverageEnabled: true
+    codeCoverageEnabled: false
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     publishRunAttachments: false
@@ -50,9 +50,11 @@ steps:
 
 - task: CoverageConverter@0
   inputs:
-    samplestring: 'TestRogerio'
-    coverageFileLocation: '**/*.coverage'
     codeCoverageExeFileLocation: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe'
+    listTestFiles: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
 
 - task: PowerShell@2
   inputs:
