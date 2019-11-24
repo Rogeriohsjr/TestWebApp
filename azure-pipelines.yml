@@ -34,11 +34,6 @@ steps:
     configuration: '$(buildConfiguration)'
     codeCoverageEnabled: true
 
-- task: VisualStudioTestPlatformInstaller@1
-  inputs:
-    packageFeedSelector: 'nugetOrg'
-    versionSelector: 'latestPreRelease'
-
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
@@ -52,3 +47,15 @@ steps:
     coverageFileLocation: '**/*.coverage'
     codeCoverageExeFileLocation: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe'
 
+- task: reportgenerator@4
+  displayName: 'Generate Coverage Report'
+  inputs:
+    reports: '$(Agent.TempDirectory)\TestResults\DynamicCodeCoverage.coveragexml'
+    targetdir: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports'
+    assemblyfilters: '-xunit*'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Coverage Report'
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\DynamicCodeCoverage.coveragexml'
