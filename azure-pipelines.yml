@@ -96,3 +96,9 @@ steps:
     script: |
       cd "$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports"
       ls
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
