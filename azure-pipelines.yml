@@ -41,20 +41,10 @@ steps:
     configuration: '$(buildConfiguration)'
     publishRunAttachments: false
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      cd "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools"
-      ls
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      cd "$(Agent.TempDirectory)\TestResults"
-      ls
-
+# This is the extension that generate the coverage test and converts it into .coveragexml.
+# It will get all the Test Projects that is located in searchFolderForTestFiles using the filter in listTestFiles.
+# After we get all the Test Projects dlls, We will run the VSTest for all the Test Project with /EnabledCodeCoverage,
+# which will generate the DynamicCodeCoverage.coveragexml.
 - task: CoverageConverter@0
   inputs:
     searchFolderForTestFiles: '$(System.DefaultWorkingDirectory)'
@@ -65,13 +55,7 @@ steps:
     temporaryFileCoveragexml: '\TestResults\DynamicCodeCoverage.coveragexml'
     codeCoverageExeFileLocation: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe'
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      cd "$(Agent.TempDirectory)\TestResults"
-      ls
-
+# Here is the Report Generator that will get the DynamicCodeCoverage.coveraxml created above and convert into a Report.
 - task: reportgenerator@4
   displayName: 'Generate Coverage Report'
   inputs:
@@ -79,13 +63,7 @@ steps:
     targetdir: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports'
     reporttypes: 'HtmlInline_AzurePipelines;Cobertura;Badges'
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      cd "$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports"
-      ls
-
+# This app will publish the report into Azure Code Coverage Tab.
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish Coverage Report'
   inputs:
@@ -93,13 +71,6 @@ steps:
     summaryFileLocation: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports\Cobertura.xml'
     reportDirectory: '$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports'
 
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      cd "$(System.DefaultWorkingDirectory)\TestResults\Coverage\Reports"
-      ls
 
 - task: PublishBuildArtifacts@1
   inputs:
