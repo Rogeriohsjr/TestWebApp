@@ -51,7 +51,7 @@ steps:
     vsTestExeFileLocation: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe'
     vsTestArgs: '/EnableCodeCoverage'
     listTestFiles: '**\bin\**\*.Tests*.dll'
-    temporaryFolderForCodeCoverage: 'Agent.TempDirectory'
+    temporaryFolderForCodeCoverage: $(Agent.TempDirectory)
     temporaryFileCoveragexml: '\TestResults\DynamicCodeCoverage.coveragexml'
     codeCoverageExeFileLocation: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Team Tools\Dynamic Code Coverage Tools\CodeCoverage.exe'
 
